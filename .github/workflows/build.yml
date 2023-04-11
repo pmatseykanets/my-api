@@ -17,11 +17,6 @@ jobs:
         go: ["1.20"]
     runs-on: ubuntu-latest
     steps:
-    - name: Set up git
-      run: |
-        git config --global user.email "release@example.com"
-        git config --global user.name "Release Bot"
-
     - name: Set up Go
       uses: actions/setup-go@v3
       with:
@@ -32,8 +27,6 @@ jobs:
 
     - name: Checkout
       uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
 
     - name: Vet
       run: go vet ./...
@@ -48,11 +41,11 @@ jobs:
       run: docker build -t "${{ env.VERSION }}" .
 
     # Push the image to the registry
+    # ...
 
-    - name: Tag a commit
+    - uses: rickstaa/action-create-tag@v1
       if: github.ref == 'refs/heads/master'
-      run: git tag ${{ env.VERSION }} -m "${{ env.VERSION }}"
-
-    - name: Push the tag
-      if: github.ref == 'refs/heads/master'
-      run: git push --tags
+      with:
+        tag: "${{ env.VERSION }}"
+        tag_exists_error: true
+        message: "${{ env.VERSION }}"
