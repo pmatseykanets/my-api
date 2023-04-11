@@ -41,3 +41,13 @@ jobs:
 
     - name: Build docker image
       run: docker build -t "${{ env.VERSION }}" .
+
+    # Push the image to the registry
+
+    - name: Tag a commit
+      if: github.ref == 'refs/heads/master'
+      run: git tag ${{ env.VERSION }} -m "${{ env.VERSION }}"
+
+    - name: Push the tag
+      if: github.ref == 'refs/heads/master'
+      run: git push --tags
