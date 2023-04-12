@@ -49,12 +49,12 @@ jobs:
       with:
         context: .
         push: true
-        tags: "pmatseykanets/my-api:${{ env.VERSION }}"
+        tags: ghcr.io/${{ github.repository }}:${{ env.VERSION }}
 
     - uses: rickstaa/action-create-tag@v1
       if: github.ref == 'refs/heads/master'
       with:
-        tag: "${{ env.VERSION }}"
+        tag: ${{ env.VERSION }}
         tag_exists_error: true
         message: "${{ env.VERSION }}"
         github_token: ${{ secrets.GH_TOKEN }}
